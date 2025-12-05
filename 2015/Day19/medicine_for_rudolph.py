@@ -47,32 +47,6 @@ def reverse_mapping(m):
             r_map[v] = key
     return r_map
 
-def find_mutation_count(m, molecule):
-    e_map = m['e']
-    m = {k:v for k,v in m.items() if k != 'e'}
-    r_map = reverse_mapping(m)
-    print(r_map)
-    print(sorted([k for k in r_map.keys() if k != 'e'], key=len, reverse=True))
-    step = 0
-    while molecule != 'e':
-        if molecule in e_map:
-            molecule = 'e'
-            step += 1
-            continue
-        for key in sorted([k for k in r_map.keys() if k != 'e'], key=len, reverse=True):
-            if key in molecule:
-                # count = molecule.count(key)
-                index = molecule.find(key)
-                print(index)
-                molecule = molecule[:index] + r_map[key] + molecule[index+len(key):]
-                step += 1
-                print(molecule)
-                break
-        # if step > 3:
-            # break
-        print(molecule)
-    return step
-
 import random
 
 def find_mutation_count_randomized(m, molecule):
@@ -87,7 +61,6 @@ def find_mutation_count_randomized(m, molecule):
         # Keep going until 'e' or a dead end
         while current_molecule != 'e':
             found_match = False
-            # Get a list of all potential keys (reversed values) and shuffle them
             keys = list(r_map.keys())
             random.shuffle(keys)
             
@@ -97,7 +70,7 @@ def find_mutation_count_randomized(m, molecule):
                     current_molecule = current_molecule[:index] + r_map[key] + current_molecule[index + len(key):]
                     steps += 1
                     found_match = True
-                    break # Break the inner loop to re-shuffle and find the *next* match
+                    break
 
             if not found_match:
                 # Dead end reached, break the inner while loop and restart the whole process
@@ -111,8 +84,3 @@ def find_mutation_count_randomized(m, molecule):
 
 print('Test:', find_mutation_count_randomized(t_mappings, t_molecule))
 print('Data:', find_mutation_count_randomized(d_mappings, d_molecule))
-
-
-# print('-- Part 2 Improved --')
-# print(f'Test: {greedy_random_reverse_improved(t_molecule.strip(), _parse_mappings_dict(raw_mappings_t), tries=5000, seed=42)}')
-# print(f'Data: {greedy_random_reverse_improved(d_molecule.strip(), _parse_mappings_dict(raw_mappings), tries=100000, seed=42)}')
