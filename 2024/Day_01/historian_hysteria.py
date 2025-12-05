@@ -9,11 +9,17 @@ def get_values(data):
     values = (line.split(' ') for line in data)
     return [[v[0], v[-1]] for v in values]
 
-def get_distance_of_ordered_list(data):
+def get_distance_of_ordered_list(data, part_2=False):        
     values = get_values(data)
-    print(values)
     lhs = sorted([int(v[0]) for v in values], key=lambda x: int(x))
     rhs = sorted([int(v[1]) for v in values], key=lambda x: int(x))
+
+    if part_2:
+        similartiy_score = 0
+        for v in lhs:
+            similartiy_score += v * rhs.count(v)
+        return similartiy_score
+
     total_distance = 0
     for i in range(len(values)):
         total_distance += abs(lhs[i]-rhs[i])
@@ -24,4 +30,5 @@ print(f'Test: {get_distance_of_ordered_list(test_data)}')
 print(f'Data: {get_distance_of_ordered_list(input_data)}')
 
 print('Part 2')
-# find count
+print(f'Test: {get_distance_of_ordered_list(test_data, part_2=True)}')
+print(f'Data: {get_distance_of_ordered_list(input_data, part_2=True)}')
